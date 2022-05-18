@@ -1,6 +1,6 @@
-const inputCheck = require("./utils/inputCheck")
 const express = require("express")
 const mysql = require("mysql2")
+const inputCheck = require("./utils/inputCheck")
 
 const PORT = process.env.PORT || 3001
 const app = express()
@@ -9,13 +9,14 @@ const app = express()
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 
+// Connect to database
 const db = mysql.createConnection(
     {
         host: "localhost",
         // Your MySQL username,
         user: "root",
         // Your MySQL password
-        password: "Djpdim14!",
+        password: "",
         database: "election",
     },
     console.log("Connected to the election database.")
@@ -83,8 +84,9 @@ app.post("/api/candidate", ({ body }, res) => {
         res.status(400).json({ error: errors })
         return
     }
+
     const sql = `INSERT INTO candidates (first_name, last_name, industry_connected)
-  VALUES (?,?,?)`
+    VALUES (?,?,?)`
     const params = [body.first_name, body.last_name, body.industry_connected]
 
     db.query(sql, params, (err, result) => {
